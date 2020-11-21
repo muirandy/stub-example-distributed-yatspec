@@ -22,4 +22,18 @@ public class StubExampleTest {
         assertThat(response.statusCode()).isEqualTo(200);
         assertThat(responseBody).isEmpty();
     }
+
+    @Test
+    void shouldReturnReversedString() {
+        String input = "helloWorld";
+        Response response = given()
+                .header("Content-Type", "application/json")
+                .when()
+                .body(input)
+                .post(BASE_PATH);
+        String responseBody = response.getBody().asString();
+
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(responseBody).isEqualTo("dlroWolleh");
+    }
 }
