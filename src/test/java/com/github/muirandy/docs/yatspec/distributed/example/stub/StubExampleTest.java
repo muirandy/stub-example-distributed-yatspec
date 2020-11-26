@@ -14,7 +14,9 @@ public class StubExampleTest {
     @Test
     void shouldReturnEmpty200ForEmptyRequest() {
         Response response = given()
-                .header("Content-Type", "application/json")
+                .header("Content-Type", "text/plain" +
+                        "" +
+                        "")
                 .when()
                 .post(BASE_PATH);
         String responseBody = response.getBody().asString();
@@ -27,7 +29,7 @@ public class StubExampleTest {
     void shouldReturnReversedString() {
         String input = "helloWorld";
         Response response = given()
-                .header("Content-Type", "application/json")
+                .header("Content-Type", "text/plain")
                 .when()
                 .body(input)
                 .post(BASE_PATH);

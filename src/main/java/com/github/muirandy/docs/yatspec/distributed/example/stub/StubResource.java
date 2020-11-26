@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Path("/reverse")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class StubResource {
 
     private DiagramLogger diagramLogger;
@@ -31,6 +29,8 @@ public class StubResource {
 
     @POST
     @Path("/configure")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public void configureLogger(KafkaConfiguration kafkaConfiguration) {
         diagramLogger = new KafkaLogger(kafkaConfiguration.kafkaHost, kafkaConfiguration.kafkaPort);
         sequenceDiagramFacade = new SequenceDiagramFacade(diagramLogger);
@@ -40,6 +40,7 @@ public class StubResource {
 
     @DELETE
     @Path("/configure")
+    @Consumes(MediaType.APPLICATION_JSON)
     public void deleteLogger() {
         diagramLogger = new NoOpDiagramLogger();
         sequenceDiagramFacade = new SequenceDiagramFacade(diagramLogger);
@@ -48,12 +49,15 @@ public class StubResource {
     }
 
     @POST
+    @Consumes(MediaType.TEXT_PLAIN)
     public String reverseString(String input) {
         sequenceDiagramFacade.log(createRequestLog(input));
         List<String> letters = Arrays.asList(input.split(""));
         Collections.reverse(letters);
         String response = letters.stream().collect(Collectors.joining(""));
         sequenceDiagramFacade.log(createResponseLog(response));
+        System.out.println("Input: " + input);
+        System.out.println("Output: " + response);
         return response;
     }
 
