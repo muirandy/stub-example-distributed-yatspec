@@ -1,6 +1,8 @@
 package com.github.muirandy.docs.yatspec.distributed.example.stub;
 
-import com.github.muirandy.docs.yatspec.distributed.*;
+import com.github.muirandy.docs.living.api.DiagramLogger;
+import com.github.muirandy.docs.living.api.Log;
+import com.github.muirandy.docs.yatspec.distributed.NoOpDiagramLogger;
 import com.github.muirandy.docs.yatspec.distributed.log.kafka.KafkaConfiguration;
 import com.github.muirandy.docs.yatspec.distributed.log.kafka.KafkaLogger;
 
