@@ -1,9 +1,6 @@
 package com.github.muirandy.docs.yatspec.distributed.example.stub;
 
-import com.github.muirandy.docs.yatspec.distributed.DiagramLogger;
-import com.github.muirandy.docs.yatspec.distributed.Log;
-import com.github.muirandy.docs.yatspec.distributed.NoOpDiagramLogger;
-import com.github.muirandy.docs.yatspec.distributed.SequenceDiagramFacade;
+import com.github.muirandy.docs.yatspec.distributed.*;
 import com.github.muirandy.docs.yatspec.distributed.log.kafka.KafkaConfiguration;
 import com.github.muirandy.docs.yatspec.distributed.log.kafka.KafkaLogger;
 
@@ -18,13 +15,11 @@ import java.util.stream.Collectors;
 public class StubResource {
 
     private DiagramLogger diagramLogger;
-    private SequenceDiagramFacade sequenceDiagramFacade;
     private String sourceSystem = "";
     private String thisSystemName = "";
 
     public StubResource() {
         diagramLogger = new NoOpDiagramLogger();
-        sequenceDiagramFacade = new SequenceDiagramFacade(diagramLogger);
     }
 
     @POST
@@ -33,7 +28,6 @@ public class StubResource {
     @Produces(MediaType.APPLICATION_JSON)
     public void configureLogger(KafkaConfiguration kafkaConfiguration) {
         diagramLogger = new KafkaLogger(kafkaConfiguration.kafkaHost, kafkaConfiguration.kafkaPort);
-        sequenceDiagramFacade = new SequenceDiagramFacade(diagramLogger);
         sourceSystem = kafkaConfiguration.sourceSystemName;
         thisSystemName = kafkaConfiguration.thisSystemName;
     }
@@ -43,7 +37,6 @@ public class StubResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void deleteLogger() {
         diagramLogger = new NoOpDiagramLogger();
-        sequenceDiagramFacade = new SequenceDiagramFacade(diagramLogger);
         sourceSystem = "";
         thisSystemName = "";
     }
@@ -51,11 +44,11 @@ public class StubResource {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     public String reverseString(String input) {
-        sequenceDiagramFacade.log(createRequestLog(input));
+        diagramLogger.log(createRequestLog(input));
         List<String> letters = Arrays.asList(input.split(""));
         Collections.reverse(letters);
         String response = letters.stream().collect(Collectors.joining(""));
-        sequenceDiagramFacade.log(createResponseLog(response));
+        diagramLogger.log(createResponseLog(response));
         System.out.println("Input: " + input);
         System.out.println("Output: " + response);
         return response;
